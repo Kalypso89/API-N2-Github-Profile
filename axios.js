@@ -33,5 +33,8 @@ function getProfiles (event) {
             </section>
             `
         })
+        .finally(()=> {
+            input.value = null; //input.value = "";
+        })
 
 }
