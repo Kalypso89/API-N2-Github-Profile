@@ -27,7 +27,11 @@ function getProfiles (event) {
             console.log(response.data)
         })
         .catch((error) => {
-            console.log("error")
+            profileContainer.innerHTML = `
+            <section class="card">
+                <p>No profile with this username</p>
+            </section>
+            `
         })
 
 }
