@@ -4,37 +4,43 @@ const input = document.getElementById('search');
 const form = document.getElementById('form');
 form.addEventListener('submit', getProfiles)
 
-function getProfiles (event) {
+async function getProfiles (event) {
     event.preventDefault();
-    const myEndpoint = `${APIURL}${input.value}`
-    axios
-        .get(myEndpoint)
-        .then((response) => {
-            profileContainer.innerHTML = `
-            <section class="card">
-                <img src=${response.data.avatar_url} class="avatar">
-                <div class="user-info">
-                    <h2>${response.data.name}</h2>
-                    <p>${response.data.bio}</p>
-                    <ul>
-                        <li><strong>${response.data.followers} Followers</strong></li>
-                        <li><strong>${response.data.following} Following</strong></li>
-                        <li><strong>${response.data.public_repos} Repos</strong></li>
-                    </ul>
-                </div>
-            </section>
-            `
-            console.log(response.data)
-        })
-        .catch((error) => {
-            profileContainer.innerHTML = `
-            <section class="card">
-                <p>No profile with this username</p>
-            </section>
-            `
-        })
-        .finally(()=> {
-            input.value = null; //input.value = "";
-        })
+    const myEndpointInfo = `${APIURL}${input.value}`
+    const myEndpointRepos = `${APIURL}${input.value}/repos?sort=updated&direction=desc&per_page=5`;
+    input.value = null; //input.value = "";
 
+    try {
+        const profileInfo = await axios.get(myEndpointInfo);
+        const reposInfo = await axios.get(myEndpointRepos);
+        profileContainer.innerHTML = `
+        <section class="card">
+            <img src=${profileInfo.data.avatar_url} class="avatar">
+            <div class="user-info">
+                <h2>${profileInfo.data.name}</h2>
+                <p>${profileInfo.data.bio}</p>
+                <ul>
+                    <li><strong>${profileInfo.data.followers} Followers</strong></li>
+                    <li><strong>${profileInfo.data.following} Following</strong></li>
+                    <li><strong>${profileInfo.data.public_repos} Repos</strong></li>
+                </ul>
+                <div>
+                ${
+                    reposInfo.data.map(({ name }) => `
+                        <span class="repo">${name}</span>
+                    `).join("") //tiene que ser con span por el display inline-block; usar join para unir los elementos en un string sin comas
+                }
+                </div>
+            </div>
+        </section>
+        `
+    } catch {
+        profileContainer.innerHTML = `
+        <section class="card">
+            <p>No profile with this username</p>
+        </section>
+        `
+    }
 }
+
+// https://docs.github.com/en/rest/repos/repos?apiVersion=2022-11-28#list-repositories-for-a-user
