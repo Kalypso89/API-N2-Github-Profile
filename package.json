@@ -1,0 +1,14 @@
+{
+  "name": "api-n2-github-profile",
+  "version": "1.0.0",
+  "description": "",
+  "main": "axios.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kalypso",
+  "license": "ISC",
+  "devDependencies": {
+    "axios": "^1.6.3"
+  }
+}
