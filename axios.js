@@ -4,8 +4,8 @@ const input = document.getElementById('search');
 const form = document.getElementById('form');
 form.addEventListener('submit', getProfiles)
 
-function getProfiles () {
-
+function getProfiles (event) {
+    event.preventDefault();
     const myEndpoint = `${APIURL}${input.value}`
     axios
         .get(myEndpoint)
