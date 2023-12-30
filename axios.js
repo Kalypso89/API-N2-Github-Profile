@@ -8,11 +8,13 @@ async function getProfiles (event) {
     event.preventDefault();
     const myEndpointInfo = `${APIURL}${input.value}`
     const myEndpointRepos = `${APIURL}${input.value}/repos?sort=updated&direction=desc&per_page=5`;
-    input.value = null; //input.value = "";
+    input.value = null;
 
     try {
-        const profileInfo = await axios.get(myEndpointInfo);
-        const reposInfo = await axios.get(myEndpointRepos);
+        const [profileInfo, reposInfo] = await Promise.all([
+            axios.get(myEndpointInfo),
+            axios.get(myEndpointRepos),
+        ]);
         profileContainer.innerHTML = `
         <section class="card">
             <img src=${profileInfo.data.avatar_url} class="avatar">
@@ -28,7 +30,7 @@ async function getProfiles (event) {
                 ${
                     reposInfo.data.map(({ name }) => `
                         <span class="repo">${name}</span>
-                    `).join("") //tiene que ser con span por el display inline-block; usar join para unir los elementos en un string sin comas
+                    `).join("")
                 }
                 </div>
             </div>
@@ -42,5 +44,3 @@ async function getProfiles (event) {
         `
     }
 }
-
-// https://docs.github.com/en/rest/repos/repos?apiVersion=2022-11-28#list-repositories-for-a-user
