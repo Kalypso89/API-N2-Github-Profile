@@ -2,7 +2,7 @@ const APIURL = 'https://api.github.com/users/';
 const profileContainer = document.getElementById('main');
 const input = document.getElementById('search');
 const form = document.getElementById('form');
-form.addEventListener('submit', getProfiles)
+form.addEventListener('submit', getProfiles);
 
 async function getProfiles (event) {
     event.preventDefault();
